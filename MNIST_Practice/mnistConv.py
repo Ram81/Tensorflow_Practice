@@ -39,7 +39,7 @@ h_pool1 = max_pool_2x2(h_conv1)
 
 
 #Second Convolutional Layer - 64 features and 5x5 patch
-W_conv2 = weight_variable([5, 5, 1, 64])
+W_conv2 = weight_variable([5, 5, 32, 64])
 b_conv2 = bias_variable([64])
 
 h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
