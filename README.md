@@ -1,1 +1,1 @@
-# Implementation of Some Basic Models using Tensorflow.
+# Implementation of Basic Models using Tensorflow.
