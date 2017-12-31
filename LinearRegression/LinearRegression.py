@@ -18,7 +18,7 @@ y = np.array([0., -1., -2., -3.])
 
 input_fn = tf.contrib.learn.io.numpy_input_fn({"x":x}, y, batch_size = 4, num_epochs=1000)
 
-#we can invoke 1000 training steps by using fir method
+#we can invoke 1000 training steps by using fit method
 estimator.fit(input_fn = input_fn, steps = 1000)
 
 #evaluate model
