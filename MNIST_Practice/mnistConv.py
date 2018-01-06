@@ -83,4 +83,3 @@ for i in range(20000):
 		train_step.run(feed_dict = {x: batch[0], y_: batch[1], keep_prob : 0.5})
 
 print("Test Accuracy %g"%accuracy.eval(feed_dict = {x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
-
