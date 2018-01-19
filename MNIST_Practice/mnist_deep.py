@@ -56,3 +56,13 @@ B_fc1 = bias_variable([1024])
 
 H_pool2_flat = tf.reshape(H_pool2, [-1, 7 * 7 * 64])
 H_fc1 = tf.nn.relu(tf.matmul(H_pool2_flat, W_fc1) + B_fc1)
+
+# Dropout Layer
+keep_prob = tf.placeholder(tf.float32)
+H_fc1_dropout = tf.nn.dropout(H_fc1, keep_prob)
+
+# Readout Layer
+W_fc2 = weight_variable([1024, 10])
+B_fc2 = bias_variable([10])
+
+Y_conv = tf.matmul(H_fc1_dropout, W_fc2) + B_fc2
