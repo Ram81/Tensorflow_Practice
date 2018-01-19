@@ -50,3 +50,9 @@ B_conv2 = bias_variable([64])
 H_conv2 = tf.nn.relu(conv2d(H_pool1, W_conv2) + B_conv2)
 H_pool2 = max_pool_2x2(H_conv2)
 
+# Densely Connected Layer
+W_fc1 = weight_variable([7 * 7 * 64, 1024])
+B_fc1 = bias_variable([1024])
+
+H_pool2_flat = tf.reshape(H_pool2, [-1, 7 * 7 * 64])
+H_fc1 = tf.nn.relu(tf.matmul(H_pool2_flat, W_fc1) + B_fc1)
