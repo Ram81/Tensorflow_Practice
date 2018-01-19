@@ -32,3 +32,14 @@ def max_pool_2x2(X):
 		Returns a downsampled feature map by 2X
 	'''
 	return tf.nn.max_pool(X, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+
+# Define First conv layer
+W_conv1 = weight_variable([5, 5, 1, 32])
+B_conv1 = bias_variable([32])
+
+# reshape original input vectors
+X_image = tf.reshape(X, [-1, 28, 28, 1])
+
+# First convolution operation
+H_conv1 = tf.nn.relu(conv2d(X_image, W_conv1) + B_conv1)
+H_pool1 = max_pool_2x2(H_conv1)
