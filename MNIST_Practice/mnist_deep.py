@@ -82,7 +82,7 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 with tf.Session() as session:
 	session.run(tf.global_variables_initializer())
-	for i in range(200):
+	for i in range(20000):
 		batch = mnist.train.next_batch(50)
 		if i%100 == 0:
 			train_accuracy = accuracy.eval(feed_dict={X: batch[0], Y: batch[1], keep_prob: 1.0})
