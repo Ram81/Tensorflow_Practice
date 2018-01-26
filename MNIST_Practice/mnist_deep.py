@@ -90,3 +90,4 @@ with tf.Session() as session:
 		train_step.run(feed_dict={X: batch[0], Y: batch[1], keep_prob: 0.5})
 
 	print('Test accuracy is %g'%(accuracy.eval(feed_dict={X: mnist.test.images, Y: mnist.test.labels, keep_prob: 1.0})))
+

@@ -6,10 +6,10 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 tf.logging.set_verbosity(tf.logging.ERROR)
 
-#MNIST has 10 output classes
+# number of output classes
 NUM_CLASSES = 10
 
-#MNIST images are 28 x 28 pixels
+# MNIST images 28 x 28 pixels
 IMAGE_SIZE = 28
 IMAGE_PIXELS = IMAGE_SIZE * IMAGE_SIZE
 
