@@ -1,0 +1,3804 @@
+node {
+  name: "Placeholder"
+  op: "Placeholder"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: 20
+        }
+        dim {
+          size: 1
+        }
+      }
+    }
+  }
+}
+node {
+  name: "Placeholder_1"
+  op: "Placeholder"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: 21
+        }
+      }
+    }
+  }
+}
+node {
+  name: "rnn/Rank"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 3
+      }
+    }
+  }
+}
+node {
+  name: "rnn/range/start"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 2
+      }
+    }
+  }
+}
+node {
+  name: "rnn/range/delta"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/range"
+  op: "Range"
+  input: "rnn/range/start"
+  input: "rnn/Rank"
+  input: "rnn/range/delta"
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/concat/values_0"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        tensor_content: "\001\000\000\000\000\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/concat/axis"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/concat"
+  op: "ConcatV2"
+  input: "rnn/concat/values_0"
+  input: "rnn/range"
+  input: "rnn/concat/axis"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/transpose"
+  op: "Transpose"
+  input: "Placeholder"
+  input: "rnn/concat"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tperm"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/Shape"
+  op: "Shape"
+  input: "rnn/transpose"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "out_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice/stack"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice/stack_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 2
+      }
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice/stack_2"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice"
+  op: "StridedSlice"
+  input: "rnn/Shape"
+  input: "rnn/strided_slice/stack"
+  input: "rnn/strided_slice/stack_1"
+  input: "rnn/strided_slice/stack_2"
+  attr {
+    key: "Index"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "begin_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "ellipsis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "end_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "new_axis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "shrink_axis_mask"
+    value {
+      i: 1
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/ExpandDims/dim"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/ExpandDims"
+  op: "ExpandDims"
+  input: "rnn/strided_slice"
+  input: "rnn/LSTMCellZeroState/ExpandDims/dim"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tdim"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/Const"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 24
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/concat/axis"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/concat"
+  op: "ConcatV2"
+  input: "rnn/LSTMCellZeroState/ExpandDims"
+  input: "rnn/LSTMCellZeroState/Const"
+  input: "rnn/LSTMCellZeroState/concat/axis"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/zeros/Const"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/zeros"
+  op: "Fill"
+  input: "rnn/LSTMCellZeroState/concat"
+  input: "rnn/LSTMCellZeroState/zeros/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/ExpandDims_1/dim"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/ExpandDims_1"
+  op: "ExpandDims"
+  input: "rnn/strided_slice"
+  input: "rnn/LSTMCellZeroState/ExpandDims_1/dim"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tdim"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/Const_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 24
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/ExpandDims_2/dim"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/ExpandDims_2"
+  op: "ExpandDims"
+  input: "rnn/strided_slice"
+  input: "rnn/LSTMCellZeroState/ExpandDims_2/dim"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tdim"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/Const_2"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 24
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/concat_1/axis"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/concat_1"
+  op: "ConcatV2"
+  input: "rnn/LSTMCellZeroState/ExpandDims_2"
+  input: "rnn/LSTMCellZeroState/Const_2"
+  input: "rnn/LSTMCellZeroState/concat_1/axis"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/zeros_1/Const"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/zeros_1"
+  op: "Fill"
+  input: "rnn/LSTMCellZeroState/concat_1"
+  input: "rnn/LSTMCellZeroState/zeros_1/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/ExpandDims_3/dim"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/ExpandDims_3"
+  op: "ExpandDims"
+  input: "rnn/strided_slice"
+  input: "rnn/LSTMCellZeroState/ExpandDims_3/dim"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tdim"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/LSTMCellZeroState/Const_3"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 24
+      }
+    }
+  }
+}
+node {
+  name: "rnn/Shape_1"
+  op: "Shape"
+  input: "rnn/transpose"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "out_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice_1/stack"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice_1/stack_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice_1/stack_2"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice_1"
+  op: "StridedSlice"
+  input: "rnn/Shape_1"
+  input: "rnn/strided_slice_1/stack"
+  input: "rnn/strided_slice_1/stack_1"
+  input: "rnn/strided_slice_1/stack_2"
+  attr {
+    key: "Index"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "begin_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "ellipsis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "end_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "new_axis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "shrink_axis_mask"
+    value {
+      i: 1
+    }
+  }
+}
+node {
+  name: "rnn/Shape_2"
+  op: "Shape"
+  input: "rnn/transpose"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "out_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice_2/stack"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice_2/stack_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 2
+      }
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice_2/stack_2"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/strided_slice_2"
+  op: "StridedSlice"
+  input: "rnn/Shape_2"
+  input: "rnn/strided_slice_2/stack"
+  input: "rnn/strided_slice_2/stack_1"
+  input: "rnn/strided_slice_2/stack_2"
+  attr {
+    key: "Index"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "begin_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "ellipsis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "end_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "new_axis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "shrink_axis_mask"
+    value {
+      i: 1
+    }
+  }
+}
+node {
+  name: "rnn/ExpandDims/dim"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/ExpandDims"
+  op: "ExpandDims"
+  input: "rnn/strided_slice_2"
+  input: "rnn/ExpandDims/dim"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tdim"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/Const"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 24
+      }
+    }
+  }
+}
+node {
+  name: "rnn/concat_1/axis"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/concat_1"
+  op: "ConcatV2"
+  input: "rnn/ExpandDims"
+  input: "rnn/Const"
+  input: "rnn/concat_1/axis"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/zeros/Const"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/zeros"
+  op: "Fill"
+  input: "rnn/concat_1"
+  input: "rnn/zeros/Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/time"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/TensorArray"
+  op: "TensorArrayV3"
+  input: "rnn/strided_slice_1"
+  attr {
+    key: "clear_after_read"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "dynamic_size"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "element_shape"
+    value {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: 24
+        }
+      }
+    }
+  }
+  attr {
+    key: "identical_element_shapes"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "tensor_array_name"
+    value {
+      s: "rnn/dynamic_rnn/output_0"
+    }
+  }
+}
+node {
+  name: "rnn/TensorArray_1"
+  op: "TensorArrayV3"
+  input: "rnn/strided_slice_1"
+  attr {
+    key: "clear_after_read"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "dynamic_size"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "element_shape"
+    value {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: 1
+        }
+      }
+    }
+  }
+  attr {
+    key: "identical_element_shapes"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "tensor_array_name"
+    value {
+      s: "rnn/dynamic_rnn/input_0"
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayUnstack/Shape"
+  op: "Shape"
+  input: "rnn/transpose"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "out_type"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayUnstack/strided_slice/stack"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayUnstack/strided_slice/stack_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayUnstack/strided_slice/stack_2"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayUnstack/strided_slice"
+  op: "StridedSlice"
+  input: "rnn/TensorArrayUnstack/Shape"
+  input: "rnn/TensorArrayUnstack/strided_slice/stack"
+  input: "rnn/TensorArrayUnstack/strided_slice/stack_1"
+  input: "rnn/TensorArrayUnstack/strided_slice/stack_2"
+  attr {
+    key: "Index"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "begin_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "ellipsis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "end_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "new_axis_mask"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "shrink_axis_mask"
+    value {
+      i: 1
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayUnstack/range/start"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayUnstack/range/delta"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayUnstack/range"
+  op: "Range"
+  input: "rnn/TensorArrayUnstack/range/start"
+  input: "rnn/TensorArrayUnstack/strided_slice"
+  input: "rnn/TensorArrayUnstack/range/delta"
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayUnstack/TensorArrayScatter/TensorArrayScatterV3"
+  op: "TensorArrayScatterV3"
+  input: "rnn/TensorArray_1"
+  input: "rnn/TensorArrayUnstack/range"
+  input: "rnn/transpose"
+  input: "rnn/TensorArray_1:1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/transpose"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/iteration_counter"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/Enter"
+  op: "Enter"
+  input: "rnn/while/iteration_counter"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/while/Enter_1"
+  op: "Enter"
+  input: "rnn/time"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/while/Enter_2"
+  op: "Enter"
+  input: "rnn/TensorArray:1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/while/Enter_3"
+  op: "Enter"
+  input: "rnn/LSTMCellZeroState/zeros"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/while/Enter_4"
+  op: "Enter"
+  input: "rnn/LSTMCellZeroState/zeros_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/while/Merge"
+  op: "Merge"
+  input: "rnn/while/Enter"
+  input: "rnn/while/NextIteration"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/Merge_1"
+  op: "Merge"
+  input: "rnn/while/Enter_1"
+  input: "rnn/while/NextIteration_1"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/Merge_2"
+  op: "Merge"
+  input: "rnn/while/Enter_2"
+  input: "rnn/while/NextIteration_2"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/Merge_3"
+  op: "Merge"
+  input: "rnn/while/Enter_3"
+  input: "rnn/while/NextIteration_3"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/Merge_4"
+  op: "Merge"
+  input: "rnn/while/Enter_4"
+  input: "rnn/while/NextIteration_4"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/Less"
+  op: "Less"
+  input: "rnn/while/Merge"
+  input: "rnn/while/Less/Enter"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/Less/Enter"
+  op: "Enter"
+  input: "rnn/strided_slice_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/while/Less_1"
+  op: "Less"
+  input: "rnn/while/Merge_1"
+  input: "rnn/while/Less/Enter"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/LogicalAnd"
+  op: "LogicalAnd"
+  input: "rnn/while/Less"
+  input: "rnn/while/Less_1"
+}
+node {
+  name: "rnn/while/LoopCond"
+  op: "LoopCond"
+  input: "rnn/while/LogicalAnd"
+}
+node {
+  name: "rnn/while/Switch"
+  op: "Switch"
+  input: "rnn/while/Merge"
+  input: "rnn/while/LoopCond"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/while/Merge"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/Switch_1"
+  op: "Switch"
+  input: "rnn/while/Merge_1"
+  input: "rnn/while/LoopCond"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/while/Merge_1"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/Switch_2"
+  op: "Switch"
+  input: "rnn/while/Merge_2"
+  input: "rnn/while/LoopCond"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/while/Merge_2"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/Switch_3"
+  op: "Switch"
+  input: "rnn/while/Merge_3"
+  input: "rnn/while/LoopCond"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/while/Merge_3"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/Switch_4"
+  op: "Switch"
+  input: "rnn/while/Merge_4"
+  input: "rnn/while/LoopCond"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/while/Merge_4"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/Identity"
+  op: "Identity"
+  input: "rnn/while/Switch:1"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/Identity_1"
+  op: "Identity"
+  input: "rnn/while/Switch_1:1"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/Identity_2"
+  op: "Identity"
+  input: "rnn/while/Switch_2:1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/Identity_3"
+  op: "Identity"
+  input: "rnn/while/Switch_3:1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/Identity_4"
+  op: "Identity"
+  input: "rnn/while/Switch_4:1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/add/y"
+  op: "Const"
+  input: "^rnn/while/Identity"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/add"
+  op: "Add"
+  input: "rnn/while/Identity"
+  input: "rnn/while/add/y"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/TensorArrayReadV3"
+  op: "TensorArrayReadV3"
+  input: "rnn/while/TensorArrayReadV3/Enter"
+  input: "rnn/while/Identity_1"
+  input: "rnn/while/TensorArrayReadV3/Enter_1"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/TensorArrayReadV3/Enter"
+  op: "Enter"
+  input: "rnn/TensorArray_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_RESOURCE
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/while/TensorArrayReadV3/Enter_1"
+  op: "Enter"
+  input: "rnn/TensorArrayUnstack/TensorArrayScatter/TensorArrayScatterV3"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/kernel/Initializer/random_uniform/shape"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        tensor_content: "\031\000\000\000`\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/kernel/Initializer/random_uniform/min"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: -0.222680881619
+      }
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/kernel/Initializer/random_uniform/max"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.222680881619
+      }
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/kernel/Initializer/random_uniform/RandomUniform"
+  op: "RandomUniform"
+  input: "rnn/abdfe/kernel/Initializer/random_uniform/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/kernel"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "seed"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "seed2"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/kernel/Initializer/random_uniform/sub"
+  op: "Sub"
+  input: "rnn/abdfe/kernel/Initializer/random_uniform/max"
+  input: "rnn/abdfe/kernel/Initializer/random_uniform/min"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/kernel/Initializer/random_uniform/mul"
+  op: "Mul"
+  input: "rnn/abdfe/kernel/Initializer/random_uniform/RandomUniform"
+  input: "rnn/abdfe/kernel/Initializer/random_uniform/sub"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/kernel/Initializer/random_uniform"
+  op: "Add"
+  input: "rnn/abdfe/kernel/Initializer/random_uniform/mul"
+  input: "rnn/abdfe/kernel/Initializer/random_uniform/min"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/kernel"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/kernel"
+  op: "VariableV2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/kernel"
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 25
+        }
+        dim {
+          size: 96
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/kernel/Assign"
+  op: "Assign"
+  input: "rnn/abdfe/kernel"
+  input: "rnn/abdfe/kernel/Initializer/random_uniform"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/kernel"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/kernel/read"
+  op: "Identity"
+  input: "rnn/abdfe/kernel"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/bias/Initializer/zeros"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/bias"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 96
+          }
+        }
+        float_val: 0.0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/bias"
+  op: "VariableV2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/bias"
+      }
+    }
+  }
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 96
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/bias/Assign"
+  op: "Assign"
+  input: "rnn/abdfe/bias"
+  input: "rnn/abdfe/bias/Initializer/zeros"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/abdfe/bias"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "rnn/abdfe/bias/read"
+  op: "Identity"
+  input: "rnn/abdfe/bias"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/concat/axis"
+  op: "Const"
+  input: "^rnn/while/Identity"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/concat"
+  op: "ConcatV2"
+  input: "rnn/while/TensorArrayReadV3"
+  input: "rnn/while/Identity_4"
+  input: "rnn/while/abdfe/concat/axis"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/MatMul"
+  op: "MatMul"
+  input: "rnn/while/abdfe/concat"
+  input: "rnn/while/abdfe/MatMul/Enter"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "transpose_a"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "transpose_b"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/MatMul/Enter"
+  op: "Enter"
+  input: "rnn/abdfe/kernel/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/BiasAdd"
+  op: "BiasAdd"
+  input: "rnn/while/abdfe/MatMul"
+  input: "rnn/while/abdfe/BiasAdd/Enter"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "data_format"
+    value {
+      s: "NHWC"
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/BiasAdd/Enter"
+  op: "Enter"
+  input: "rnn/abdfe/bias/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/Const"
+  op: "Const"
+  input: "^rnn/while/Identity"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 4
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/split/split_dim"
+  op: "Const"
+  input: "^rnn/while/Identity"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/split"
+  op: "Split"
+  input: "rnn/while/abdfe/split/split_dim"
+  input: "rnn/while/abdfe/BiasAdd"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "num_split"
+    value {
+      i: 4
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/add/y"
+  op: "Const"
+  input: "^rnn/while/Identity"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.800000011921
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/add"
+  op: "Add"
+  input: "rnn/while/abdfe/split:2"
+  input: "rnn/while/abdfe/add/y"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/Sigmoid"
+  op: "Sigmoid"
+  input: "rnn/while/abdfe/add"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/mul"
+  op: "Mul"
+  input: "rnn/while/abdfe/Sigmoid"
+  input: "rnn/while/Identity_3"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/Sigmoid_1"
+  op: "Sigmoid"
+  input: "rnn/while/abdfe/split"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/Tanh"
+  op: "Tanh"
+  input: "rnn/while/abdfe/split:1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/mul_1"
+  op: "Mul"
+  input: "rnn/while/abdfe/Sigmoid_1"
+  input: "rnn/while/abdfe/Tanh"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/add_1"
+  op: "Add"
+  input: "rnn/while/abdfe/mul"
+  input: "rnn/while/abdfe/mul_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/Sigmoid_2"
+  op: "Sigmoid"
+  input: "rnn/while/abdfe/split:3"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/Tanh_1"
+  op: "Tanh"
+  input: "rnn/while/abdfe/add_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/abdfe/mul_2"
+  op: "Mul"
+  input: "rnn/while/abdfe/Sigmoid_2"
+  input: "rnn/while/abdfe/Tanh_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/TensorArrayWrite/TensorArrayWriteV3"
+  op: "TensorArrayWriteV3"
+  input: "rnn/while/TensorArrayWrite/TensorArrayWriteV3/Enter"
+  input: "rnn/while/Identity_1"
+  input: "rnn/while/abdfe/mul_2"
+  input: "rnn/while/Identity_2"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/while/abdfe/mul_2"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/TensorArrayWrite/TensorArrayWriteV3/Enter"
+  op: "Enter"
+  input: "rnn/TensorArray"
+  attr {
+    key: "T"
+    value {
+      type: DT_RESOURCE
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/while/abdfe/mul_2"
+      }
+    }
+  }
+  attr {
+    key: "frame_name"
+    value {
+      s: "rnn/while/while_context"
+    }
+  }
+  attr {
+    key: "is_constant"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "parallel_iterations"
+    value {
+      i: 32
+    }
+  }
+}
+node {
+  name: "rnn/while/add_1/y"
+  op: "Const"
+  input: "^rnn/while/Identity"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/while/add_1"
+  op: "Add"
+  input: "rnn/while/Identity_1"
+  input: "rnn/while/add_1/y"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/NextIteration"
+  op: "NextIteration"
+  input: "rnn/while/add"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/NextIteration_1"
+  op: "NextIteration"
+  input: "rnn/while/add_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/NextIteration_2"
+  op: "NextIteration"
+  input: "rnn/while/TensorArrayWrite/TensorArrayWriteV3"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/NextIteration_3"
+  op: "NextIteration"
+  input: "rnn/while/abdfe/add_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/NextIteration_4"
+  op: "NextIteration"
+  input: "rnn/while/abdfe/mul_2"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/Exit"
+  op: "Exit"
+  input: "rnn/while/Switch"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/Exit_1"
+  op: "Exit"
+  input: "rnn/while/Switch_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/while/Exit_2"
+  op: "Exit"
+  input: "rnn/while/Switch_2"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/Exit_3"
+  op: "Exit"
+  input: "rnn/while/Switch_3"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/while/Exit_4"
+  op: "Exit"
+  input: "rnn/while/Switch_4"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayStack/TensorArraySizeV3"
+  op: "TensorArraySizeV3"
+  input: "rnn/TensorArray"
+  input: "rnn/while/Exit_2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/TensorArray"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayStack/range/start"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/TensorArray"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayStack/range/delta"
+  op: "Const"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/TensorArray"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayStack/range"
+  op: "Range"
+  input: "rnn/TensorArrayStack/range/start"
+  input: "rnn/TensorArrayStack/TensorArraySizeV3"
+  input: "rnn/TensorArrayStack/range/delta"
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/TensorArray"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/TensorArrayStack/TensorArrayGatherV3"
+  op: "TensorArrayGatherV3"
+  input: "rnn/TensorArray"
+  input: "rnn/TensorArrayStack/range"
+  input: "rnn/while/Exit_2"
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@rnn/TensorArray"
+      }
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "element_shape"
+    value {
+      shape {
+        dim {
+          size: -1
+        }
+        dim {
+          size: 24
+        }
+      }
+    }
+  }
+}
+node {
+  name: "rnn/Const_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 1
+          }
+        }
+        int_val: 24
+      }
+    }
+  }
+}
+node {
+  name: "rnn/Rank_1"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 3
+      }
+    }
+  }
+}
+node {
+  name: "rnn/range_1/start"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 2
+      }
+    }
+  }
+}
+node {
+  name: "rnn/range_1/delta"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 1
+      }
+    }
+  }
+}
+node {
+  name: "rnn/range_1"
+  op: "Range"
+  input: "rnn/range_1/start"
+  input: "rnn/Rank_1"
+  input: "rnn/range_1/delta"
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/concat_2/values_0"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        tensor_content: "\001\000\000\000\000\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "rnn/concat_2/axis"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 0
+      }
+    }
+  }
+}
+node {
+  name: "rnn/concat_2"
+  op: "ConcatV2"
+  input: "rnn/concat_2/values_0"
+  input: "rnn/range_1"
+  input: "rnn/concat_2/axis"
+  attr {
+    key: "N"
+    value {
+      i: 2
+    }
+  }
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tidx"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "rnn/transpose_1"
+  op: "Transpose"
+  input: "rnn/TensorArrayStack/TensorArrayGatherV3"
+  input: "rnn/concat_2"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tperm"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "transpose/perm"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 3
+          }
+        }
+        tensor_content: "\001\000\000\000\000\000\000\000\002\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "transpose"
+  op: "Transpose"
+  input: "rnn/transpose_1"
+  input: "transpose/perm"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "Tperm"
+    value {
+      type: DT_INT32
+    }
+  }
+}
+node {
+  name: "Gather/indices"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+        }
+        int_val: 19
+      }
+    }
+  }
+}
+node {
+  name: "Gather"
+  op: "Gather"
+  input: "transpose"
+  input: "Gather/indices"
+  attr {
+    key: "Tindices"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "Tparams"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "validate_indices"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "truncated_normal/shape"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_INT32
+        tensor_shape {
+          dim {
+            size: 2
+          }
+        }
+        tensor_content: "\030\000\000\000\025\000\000\000"
+      }
+    }
+  }
+}
+node {
+  name: "truncated_normal/mean"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 0.0
+      }
+    }
+  }
+}
+node {
+  name: "truncated_normal/stddev"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+        }
+        float_val: 1.0
+      }
+    }
+  }
+}
+node {
+  name: "truncated_normal/TruncatedNormal"
+  op: "TruncatedNormal"
+  input: "truncated_normal/shape"
+  attr {
+    key: "T"
+    value {
+      type: DT_INT32
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "seed"
+    value {
+      i: 0
+    }
+  }
+  attr {
+    key: "seed2"
+    value {
+      i: 0
+    }
+  }
+}
+node {
+  name: "truncated_normal/mul"
+  op: "Mul"
+  input: "truncated_normal/TruncatedNormal"
+  input: "truncated_normal/stddev"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "truncated_normal"
+  op: "Add"
+  input: "truncated_normal/mul"
+  input: "truncated_normal/mean"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "Variable"
+  op: "VariableV2"
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 24
+        }
+        dim {
+          size: 21
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "Variable/Assign"
+  op: "Assign"
+  input: "Variable"
+  input: "truncated_normal"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@Variable"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "Variable/read"
+  op: "Identity"
+  input: "Variable"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@Variable"
+      }
+    }
+  }
+}
+node {
+  name: "Const"
+  op: "Const"
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "value"
+    value {
+      tensor {
+        dtype: DT_FLOAT
+        tensor_shape {
+          dim {
+            size: 21
+          }
+        }
+        float_val: 0.10000000149
+      }
+    }
+  }
+}
+node {
+  name: "Variable_1"
+  op: "VariableV2"
+  attr {
+    key: "container"
+    value {
+      s: ""
+    }
+  }
+  attr {
+    key: "dtype"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "shape"
+    value {
+      shape {
+        dim {
+          size: 21
+        }
+      }
+    }
+  }
+  attr {
+    key: "shared_name"
+    value {
+      s: ""
+    }
+  }
+}
+node {
+  name: "Variable_1/Assign"
+  op: "Assign"
+  input: "Variable_1"
+  input: "Const"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@Variable_1"
+      }
+    }
+  }
+  attr {
+    key: "use_locking"
+    value {
+      b: true
+    }
+  }
+  attr {
+    key: "validate_shape"
+    value {
+      b: true
+    }
+  }
+}
+node {
+  name: "Variable_1/read"
+  op: "Identity"
+  input: "Variable_1"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "_class"
+    value {
+      list {
+        s: "loc:@Variable_1"
+      }
+    }
+  }
+}
+node {
+  name: "MatMul"
+  op: "MatMul"
+  input: "Gather"
+  input: "Variable/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+  attr {
+    key: "transpose_a"
+    value {
+      b: false
+    }
+  }
+  attr {
+    key: "transpose_b"
+    value {
+      b: false
+    }
+  }
+}
+node {
+  name: "add"
+  op: "Add"
+  input: "MatMul"
+  input: "Variable_1/read"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "Softmax"
+  op: "Softmax"
+  input: "add"
+  attr {
+    key: "T"
+    value {
+      type: DT_FLOAT
+    }
+  }
+}
+node {
+  name: "init"
+  op: "NoOp"
+  input: "^rnn/abdfe/kernel/Assign"
+  input: "^rnn/abdfe/bias/Assign"
+  input: "^Variable/Assign"
+  input: "^Variable_1/Assign"
+}
+versions {
+  producer: 24
+}
